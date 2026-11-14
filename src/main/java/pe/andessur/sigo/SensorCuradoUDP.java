@@ -26,7 +26,7 @@ public class SensorCuradoUDP {
                 String json = String.format(java.util.Locale.US,
                         "{\"sensor\":\"LP-S01\",\"obra\":\"Residencial Los Pinos\","
                         + "\"fechaHora\":\"%s\",\"temperatura\":%.1f,\"unidad\":\"C\"}",
-                        LocalDateTime.now().withNano(0), temp);
+                        LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")), temp);
                 byte[] datos = json.getBytes(StandardCharsets.UTF_8);
                 socket.send(new DatagramPacket(datos, datos.length, destino, ServidorCentral.PUERTO_UDP));
                 System.out.println("Enviado (" + i + "/" + lecturas + "): " + json);
