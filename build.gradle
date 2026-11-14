@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'pe.andessur.sigo'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+// Por defecto, "gradle run" levanta el servidor de la oficina central
+application {
+    mainClass = 'pe.andessur.sigo.ServidorCentral'
+}
+
+tasks.named('run') {
+    standardInput = System.in
+}
+
+// gradle runCliente --args="IP_DEL_SERVIDOR"
+tasks.register('runCliente', JavaExec) {
+    group = 'sigo'
+    description = 'Cliente TCP de la obra: envia el parte diario en JSON'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'pe.andessur.sigo.ClienteObraTCP'
+    standardInput = System.in
+}
+
+// gradle runSensor --args="IP_DEL_SERVIDOR"
+tasks.register('runSensor', JavaExec) {
+    group = 'sigo'
+    description = 'Sensor IoT de curado (UDP): envia la temperatura cada 3 s'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'pe.andessur.sigo.SensorCuradoUDP'
+}
